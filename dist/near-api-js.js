@@ -4577,6 +4577,7 @@ const PENDING_ACCESS_KEY_PREFIX = 'pending_key'; // browser storage key for a pe
  */
 class WalletConnection {
     constructor(near, appKeyPrefix) {
+        var _a;
         if (typeof (appKeyPrefix) != 'string') {
             throw new Error('Please define a clear appKeyPrefix for this WalletConnection instance as the second argument to the constructor');
         }
@@ -4600,7 +4601,7 @@ class WalletConnection {
         }
         this._near = near;
         const authDataKey = appKeyPrefix + LOCAL_STORAGE_KEY_SUFFIX;
-        const authData = JSON.parse(globalThis.localStorage.getItem(authDataKey));
+        const authData = JSON.parse((_a = globalThis === null || globalThis === void 0 ? void 0 : globalThis.localStorage) === null || _a === void 0 ? void 0 : _a.getItem(authDataKey));
         this._networkId = near.config.networkId;
         this._walletBaseUrl = near.config.walletUrl;
         this._keyStore = near.connection.signer.keyStore;
