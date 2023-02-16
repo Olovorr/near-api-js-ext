@@ -30,7 +30,7 @@ export class ErrorContext {
 }
 
 export function logWarning(...args: any[]): void {
-    if (!process.env['NEAR_NO_LOGS']) {
+    if (!process?.env['NEAR_NO_LOGS']) {
         console.warn(...args);
     }
 }
