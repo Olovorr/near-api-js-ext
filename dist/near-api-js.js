@@ -233,7 +233,7 @@ class Account {
      */
     deleteAccount(beneficiaryId) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!process.env['NEAR_NO_LOGS']) {
+            if (!(process === null || process === void 0 ? void 0 : process.env['NEAR_NO_LOGS'])) {
                 console.log('Deleting an account does not automatically transfer NFTs and FTs to the beneficiary address. Ensure to transfer assets before deleting.');
             }
             return this.signAndSendTransaction({
@@ -3275,7 +3275,7 @@ class JsonRpcProvider extends provider_1.Provider {
                 }
                 catch (error) {
                     if (error.type === 'TimeoutError') {
-                        if (!process.env['NEAR_NO_LOGS']) {
+                        if (!(process === null || process === void 0 ? void 0 : process.env['NEAR_NO_LOGS'])) {
                             console.warn(`Retrying request to ${method} as it has timed out`, params);
                         }
                         return null;
@@ -3833,7 +3833,7 @@ class ErrorContext {
 }
 exports.ErrorContext = ErrorContext;
 function logWarning(...args) {
-    if (!process.env['NEAR_NO_LOGS']) {
+    if (!(process === null || process === void 0 ? void 0 : process.env['NEAR_NO_LOGS'])) {
         console.warn(...args);
     }
 }
@@ -4191,7 +4191,7 @@ exports.KeyPairEd25519 = KeyPairEd25519;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.printTxOutcomeLogs = exports.printTxOutcomeLogsAndFailures = void 0;
 const rpc_errors_1 = require("./rpc_errors");
-const SUPPRESS_LOGGING = !!process.env.NEAR_NO_LOGS;
+const SUPPRESS_LOGGING = !!(process === null || process === void 0 ? void 0 : process.env.NEAR_NO_LOGS);
 /**
  * Parse and print details from a query execution response
  * @param params
