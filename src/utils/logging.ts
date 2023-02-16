@@ -1,7 +1,7 @@
 import { FinalExecutionOutcome } from '../providers';
 import { parseRpcError } from './rpc_errors';
 
-const SUPPRESS_LOGGING = !!process?.env.NEAR_NO_LOGS;
+const SUPPRESS_LOGGING = true;
 
 /**
  * Parse and print details from a query execution response

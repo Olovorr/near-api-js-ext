@@ -118,9 +118,9 @@ export interface ChangeFunctionCallOptions extends FunctionCallOptions {
     */
     walletCallbackUrl?: string;
 }
-export interface ViewFunctionCallOptions extends FunctionCallOptions { 
-    parse?: (response: Uint8Array) => any; 
-    blockQuery?: BlockReference; 
+export interface ViewFunctionCallOptions extends FunctionCallOptions {
+    parse?: (response: Uint8Array) => any;
+    blockQuery?: BlockReference;
 }
 
 interface StakedBalance {
@@ -345,9 +345,7 @@ export class Account {
      * @param beneficiaryId The NEAR account that will receive the remaining Ⓝ balance from the account being deleted
      */
     async deleteAccount(beneficiaryId: string) {
-        if (!process?.env['NEAR_NO_LOGS']) {
-            console.log('Deleting an account does not automatically transfer NFTs and FTs to the beneficiary address. Ensure to transfer assets before deleting.');
-        }
+        console.log('Deleting an account does not automatically transfer NFTs and FTs to the beneficiary address. Ensure to transfer assets before deleting.');
         return this.signAndSendTransaction({
             receiverId: this.accountId,
             actions: [deleteAccount(beneficiaryId)]
@@ -481,9 +479,9 @@ export class Account {
         blockQuery = { finality: 'optimistic' }
     }: ViewFunctionCallOptions): Promise<any> {
         let encodedArgs;
-        
+
         this.validateArgs(args);
-    
+
         if(jsContract){
             encodedArgs = this.encodeJSContractArgs(contractId, methodName, Object.keys(args).length >  0 ? JSON.stringify(args): '');
         } else{
@@ -585,7 +583,7 @@ export class Account {
 
     /**
      * Returns the NEAR tokens balance and validators of a given account that is delegated to the staking pools that are part of the validators set in the current epoch.
-     * 
+     *
      * NOTE: If the tokens are delegated to a staking pool that is currently on pause or does not have enough tokens to participate in validation, they won't be accounted for.
      * @returns {Promise<ActiveDelegatedStakeBalance>}
      */

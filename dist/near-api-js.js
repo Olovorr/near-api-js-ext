@@ -5,7 +5,7 @@ globalThis.Buffer = Buffer;
 
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"./lib/browser-index":6,"buffer":108}],2:[function(require,module,exports){
-(function (process,Buffer){(function (){
+(function (Buffer){(function (){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -233,9 +233,7 @@ class Account {
      */
     deleteAccount(beneficiaryId) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!(process === null || process === void 0 ? void 0 : process.env['NEAR_NO_LOGS'])) {
-                console.log('Deleting an account does not automatically transfer NFTs and FTs to the beneficiary address. Ensure to transfer assets before deleting.');
-            }
+            console.log('Deleting an account does not automatically transfer NFTs and FTs to the beneficiary address. Ensure to transfer assets before deleting.');
             return this.signAndSendTransaction({
                 receiverId: this.accountId,
                 actions: [(0, transaction_1.deleteAccount)(beneficiaryId)]
@@ -505,8 +503,8 @@ class Account {
 }
 exports.Account = Account;
 
-}).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"./constants":9,"./providers":18,"./transaction":23,"./utils/errors":25,"./utils/exponential-backoff":26,"./utils/key_pair":29,"./utils/logging":30,"./utils/rpc_errors":31,"_process":137,"bn.js":104,"borsh":105,"buffer":108}],3:[function(require,module,exports){
+}).call(this)}).call(this,require("buffer").Buffer)
+},{"./constants":9,"./providers":18,"./transaction":23,"./utils/errors":25,"./utils/exponential-backoff":26,"./utils/key_pair":29,"./utils/logging":30,"./utils/rpc_errors":31,"bn.js":104,"borsh":105,"buffer":108}],3:[function(require,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -2901,7 +2899,7 @@ Object.defineProperty(exports, "TypedError", { enumerable: true, get: function (
 Object.defineProperty(exports, "ErrorContext", { enumerable: true, get: function () { return json_rpc_provider_1.ErrorContext; } });
 
 },{"./json-rpc-provider":19,"./provider":20}],19:[function(require,module,exports){
-(function (process,Buffer){(function (){
+(function (Buffer){(function (){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -3275,9 +3273,7 @@ class JsonRpcProvider extends provider_1.Provider {
                 }
                 catch (error) {
                     if (error.type === 'TimeoutError') {
-                        if (!(process === null || process === void 0 ? void 0 : process.env['NEAR_NO_LOGS'])) {
-                            console.warn(`Retrying request to ${method} as it has timed out`, params);
-                        }
+                        console.warn(`Retrying request to ${method} as it has timed out`, params);
                         return null;
                     }
                     throw error;
@@ -3297,8 +3293,8 @@ class JsonRpcProvider extends provider_1.Provider {
 }
 exports.JsonRpcProvider = JsonRpcProvider;
 
-}).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"../utils/errors":25,"../utils/exponential-backoff":26,"../utils/rpc_errors":31,"../utils/web":33,"./provider":20,"_process":137,"borsh":105,"buffer":108}],20:[function(require,module,exports){
+}).call(this)}).call(this,require("buffer").Buffer)
+},{"../utils/errors":25,"../utils/exponential-backoff":26,"../utils/rpc_errors":31,"../utils/web":33,"./provider":20,"borsh":105,"buffer":108}],20:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 /**
@@ -3802,7 +3798,6 @@ class Assignable {
 exports.Assignable = Assignable;
 
 },{}],25:[function(require,module,exports){
-(function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConflictingOptions = exports.ArgumentSchemaError = exports.UnknownArgumentError = exports.UnsupportedSerializationError = exports.logWarning = exports.ErrorContext = exports.TypedError = exports.ArgumentTypeError = exports.PositionalArgsError = void 0;
@@ -3833,9 +3828,7 @@ class ErrorContext {
 }
 exports.ErrorContext = ErrorContext;
 function logWarning(...args) {
-    if (!(process === null || process === void 0 ? void 0 : process.env['NEAR_NO_LOGS'])) {
-        console.warn(...args);
-    }
+    console.warn(...args);
 }
 exports.logWarning = logWarning;
 class UnsupportedSerializationError extends Error {
@@ -3863,8 +3856,7 @@ class ConflictingOptions extends Error {
 }
 exports.ConflictingOptions = ConflictingOptions;
 
-}).call(this)}).call(this,require('_process'))
-},{"_process":137}],26:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -4186,12 +4178,11 @@ class KeyPairEd25519 extends KeyPair {
 exports.KeyPairEd25519 = KeyPairEd25519;
 
 },{"./enums":24,"./serialize":32,"tweetnacl":144}],30:[function(require,module,exports){
-(function (process){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.printTxOutcomeLogs = exports.printTxOutcomeLogsAndFailures = void 0;
 const rpc_errors_1 = require("./rpc_errors");
-const SUPPRESS_LOGGING = !!(process === null || process === void 0 ? void 0 : process.env.NEAR_NO_LOGS);
+const SUPPRESS_LOGGING = true;
 /**
  * Parse and print details from a query execution response
  * @param params
@@ -4248,8 +4239,7 @@ function printTxOutcomeLogs({ contractId, logs, prefix = '', }) {
 }
 exports.printTxOutcomeLogs = printTxOutcomeLogs;
 
-}).call(this)}).call(this,require('_process'))
-},{"./rpc_errors":31,"_process":137}],31:[function(require,module,exports){
+},{"./rpc_errors":31}],31:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
