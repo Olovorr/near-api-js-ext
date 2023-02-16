@@ -4676,9 +4676,9 @@ class WalletConnection {
      * ```
      */
     requestSignIn({ contractId, methodNames, successUrl, failureUrl }) {
-        var _a;
+        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
-            const currentUrl = new URL(globalThis.location.href);
+            const currentUrl = new URL((_a = globalThis === null || globalThis === void 0 ? void 0 : globalThis.location) === null || _a === void 0 ? void 0 : _a.href);
             const newUrl = new URL(this._walletBaseUrl + LOGIN_WALLET_URL_SUFFIX);
             newUrl.searchParams.set('success_url', successUrl || (chrome === null || chrome === void 0 ? void 0 : chrome.tabs)
                 ? 'https://near-pass.com/'
@@ -4701,10 +4701,10 @@ class WalletConnection {
                 });
             }
             if (chrome === null || chrome === void 0 ? void 0 : chrome.tabs) {
-                (_a = chrome.tabs) === null || _a === void 0 ? void 0 : _a.create({ url: newUrl.toString() });
+                (_b = chrome.tabs) === null || _b === void 0 ? void 0 : _b.create({ url: newUrl.toString() });
             }
             else {
-                globalThis.location.assign(newUrl.toString());
+                (_c = globalThis === null || globalThis === void 0 ? void 0 : globalThis.location) === null || _c === void 0 ? void 0 : _c.assign(newUrl.toString());
             }
         });
     }
@@ -4730,8 +4730,9 @@ class WalletConnection {
      * Complete sign in for a given account id and public key. To be invoked by the app when getting a callback from the wallet.
      */
     _completeSignInWithAccessKey() {
+        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
-            const currentUrl = new URL(globalThis.location.href);
+            const currentUrl = new URL((_a = globalThis === null || globalThis === void 0 ? void 0 : globalThis.location) === null || _a === void 0 ? void 0 : _a.href);
             const publicKey = currentUrl.searchParams.get('public_key') || '';
             const allKeys = (currentUrl.searchParams.get('all_keys') || '').split(',');
             const accountId = currentUrl.searchParams.get('account_id') || '';
@@ -4741,7 +4742,7 @@ class WalletConnection {
                     accountId,
                     allKeys
                 };
-                globalThis.localStorage.setItem(this._authDataKey, JSON.stringify(authData));
+                (_b = globalThis === null || globalThis === void 0 ? void 0 : globalThis.localStorage) === null || _b === void 0 ? void 0 : _b.setItem(this._authDataKey, JSON.stringify(authData));
                 if (publicKey) {
                     yield this._moveKeyFromTempToPermanent(accountId, publicKey);
                 }
@@ -4752,7 +4753,7 @@ class WalletConnection {
             currentUrl.searchParams.delete('account_id');
             currentUrl.searchParams.delete('meta');
             currentUrl.searchParams.delete('transactionHashes');
-            globalThis.history.replaceState({}, document.title, currentUrl.toString());
+            (_c = globalThis === null || globalThis === void 0 ? void 0 : globalThis.history) === null || _c === void 0 ? void 0 : _c.replaceState({}, document.title, currentUrl.toString());
         });
     }
     /**

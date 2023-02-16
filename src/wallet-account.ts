@@ -183,7 +183,7 @@ export class WalletConnection {
      * ```
      */
     async requestSignIn({ contractId, methodNames, successUrl, failureUrl }: SignInOptions) {
-        const currentUrl = new URL(globalThis.location.href);
+        const currentUrl = new URL(globalThis?.location?.href);
         const newUrl = new URL(this._walletBaseUrl + LOGIN_WALLET_URL_SUFFIX);
         newUrl.searchParams.set(
             'success_url',
@@ -218,7 +218,7 @@ export class WalletConnection {
         if (chrome?.tabs) {
             chrome.tabs?.create({ url: newUrl.toString() });
         } else {
-            globalThis.location.assign(newUrl.toString());
+            globalThis?.location?.assign(newUrl.toString());
         }
     }
 
@@ -244,7 +244,7 @@ export class WalletConnection {
      * Complete sign in for a given account id and public key. To be invoked by the app when getting a callback from the wallet.
      */
     async _completeSignInWithAccessKey() {
-        const currentUrl = new URL(globalThis.location.href);
+        const currentUrl = new URL(globalThis?.location?.href);
         const publicKey = currentUrl.searchParams.get('public_key') || '';
         const allKeys = (currentUrl.searchParams.get('all_keys') || '').split(',');
         const accountId = currentUrl.searchParams.get('account_id') || '';
@@ -254,7 +254,7 @@ export class WalletConnection {
                 accountId,
                 allKeys
             };
-            globalThis.localStorage.setItem(this._authDataKey, JSON.stringify(authData));
+            globalThis?.localStorage?.setItem(this._authDataKey, JSON.stringify(authData));
             if (publicKey) {
                 await this._moveKeyFromTempToPermanent(accountId, publicKey);
             }
@@ -266,7 +266,7 @@ export class WalletConnection {
         currentUrl.searchParams.delete('meta');
         currentUrl.searchParams.delete('transactionHashes');
 
-        globalThis.history.replaceState({}, document.title, currentUrl.toString());
+        globalThis?.history?.replaceState({}, document.title, currentUrl.toString());
     }
 
     /**
