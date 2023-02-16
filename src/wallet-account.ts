@@ -108,7 +108,7 @@ export class WalletConnection {
         }
         this._near = near;
         const authDataKey = appKeyPrefix + LOCAL_STORAGE_KEY_SUFFIX;
-        const authData = JSON.parse(globalThis?.localStorage?.getItem(authDataKey));
+        const authData = globalThis?.localStorage?.getItem(authDataKey) ? JSON.parse(globalThis?.localStorage?.getItem(authDataKey)) : null;
         this._networkId = near.config.networkId;
         this._walletBaseUrl = near.config.walletUrl;
         this._keyStore = (near.connection.signer as InMemorySigner).keyStore;
