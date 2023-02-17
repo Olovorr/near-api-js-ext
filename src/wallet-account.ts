@@ -112,17 +112,13 @@ export class WalletConnection {
         this._networkId = near.config.networkId;
         this._walletBaseUrl = near.config.walletUrl;
         this._keyStore = (near.connection.signer as InMemorySigner).keyStore;
-        this._authData = authData || { allKeys: [] };
         this._authDataKey = authDataKey;
+        this._authData = authData || { allKeys: [] };
+        chrome.storage.local.get([authDataKey, 'near-api-js:keystore:orydzi.near:mainnet'], async result => {
+            this._authData = result[authDataKey]
+        });
         if (!this.isSignedIn()) {
             this._completeSignInPromise = this._completeSignInWithAccessKey();
-        }
-    }
-    async componentDidMount () {
-        if (!globalThis?.localStorage) {
-            const authData = await chrome.storage.local.get(['near_app_wallet_auth_key']);
-            this._authData = authData || { allKeys: [] };
-            this._authDataKey = 'near_app_wallet_auth_key';
         }
     }
     /**
@@ -165,6 +161,7 @@ export class WalletConnection {
      * ```
      */
     getAccountId() {
+        console.log('_authData', this._authData)
         return this._authData.accountId || '';
     }
 
@@ -231,7 +228,7 @@ export class WalletConnection {
 
         newUrl.searchParams.set('transactions', transactions
             .map(transaction => serialize(SCHEMA, transaction))
-            .map(serialized => Buffer.from(serialized).toString('base64'))
+            .map(serialized => globalThis.Buffer.from(serialized).toString('base64'))
             .join(','));
         newUrl.searchParams.set('callbackUrl', callbackUrl || currentUrl.href);
         if (meta) newUrl.searchParams.set('meta', meta);

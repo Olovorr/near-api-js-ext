@@ -1,11 +1,7 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-(function (Buffer){(function (){
 globalThis.nearApi = require('./lib/browser-index');
-globalThis.Buffer = Buffer;
 
-}).call(this)}).call(this,require("buffer").Buffer)
-},{"./lib/browser-index":6,"buffer":108}],2:[function(require,module,exports){
-(function (Buffer){(function (){
+},{"./lib/browser-index":6}],2:[function(require,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -38,10 +34,10 @@ const TX_NONCE_RETRY_WAIT = 500;
 // Exponential back off for waiting to retry.
 const TX_NONCE_RETRY_WAIT_BACKOFF = 1.5;
 function parseJsonFromRawResponse(response) {
-    return JSON.parse(Buffer.from(response).toString());
+    return JSON.parse(globalThis.Buffer.from(response).toString());
 }
 function bytesJsonStringify(input) {
-    return Buffer.from(JSON.stringify(input));
+    return globalThis.Buffer.from(JSON.stringify(input));
 }
 /**
  * This class provides common account related RPC calls including signing transactions with a {@link utils/key_pair!KeyPair}.
@@ -253,7 +249,7 @@ class Account {
     }
     /** @hidden */
     encodeJSContractArgs(contractId, method, args) {
-        return Buffer.concat([Buffer.from(contractId), Buffer.from([0]), Buffer.from(method), Buffer.from([0]), Buffer.from(args)]);
+        return globalThis.Buffer.concat([globalThis.Buffer.from(contractId), globalThis.Buffer.from([0]), globalThis.Buffer.from(method), globalThis.Buffer.from([0]), globalThis.Buffer.from(args)]);
     }
     /**
      * Execute function call
@@ -352,7 +348,7 @@ class Account {
      * @param viewFunctionCallOptions.contractId NEAR account where the contract is deployed
      * @param viewFunctionCallOptions.methodName The view-only method (no state mutations) name on the contract as it is written in the contract code
      * @param viewFunctionCallOptions.args Any arguments to the view contract method, wrapped in JSON
-     * @param viewFunctionCallOptions.parse Parse the result of the call. Receives a Buffer (bytes array) and converts it to any object. By default result will be treated as json.
+     * @param viewFunctionCallOptions.parse Parse the result of the call. Receives a globalThis.Buffer (bytes array) and converts it to any object. By default result will be treated as json.
      * @param viewFunctionCallOptions.stringify Convert input arguments into a bytes array. By default the input is treated as a JSON.
      * @param viewFunctionCallOptions.jsContract Is contract from JS SDK, automatically encodes args from JS SDK to binary.
      * @param viewFunctionCallOptions.blockQuery specifies which block to query state at. By default returns last "optimistic" block (i.e. not necessarily finalized).
@@ -372,7 +368,7 @@ class Account {
             if (result.logs) {
                 (0, logging_1.printTxOutcomeLogs)({ contractId, logs: result.logs });
             }
-            return result.result && result.result.length > 0 && parse(Buffer.from(result.result));
+            return result.result && result.result.length > 0 && parse(globalThis.Buffer.from(result.result));
         });
     }
     /**
@@ -385,10 +381,10 @@ class Account {
      */
     viewState(prefix, blockQuery = { finality: 'optimistic' }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { values } = yield this.connection.provider.query(Object.assign(Object.assign({ request_type: 'view_state' }, blockQuery), { account_id: this.accountId, prefix_base64: Buffer.from(prefix).toString('base64') }));
+            const { values } = yield this.connection.provider.query(Object.assign(Object.assign({ request_type: 'view_state' }, blockQuery), { account_id: this.accountId, prefix_base64: globalThis.Buffer.from(prefix).toString('base64') }));
             return values.map(({ key, value }) => ({
-                key: Buffer.from(key, 'base64'),
-                value: Buffer.from(value, 'base64')
+                key: globalThis.Buffer.from(key, 'base64'),
+                value: globalThis.Buffer.from(value, 'base64')
             }));
         });
     }
@@ -503,8 +499,7 @@ class Account {
 }
 exports.Account = Account;
 
-}).call(this)}).call(this,require("buffer").Buffer)
-},{"./constants":9,"./providers":18,"./transaction":23,"./utils/errors":25,"./utils/exponential-backoff":26,"./utils/key_pair":29,"./utils/logging":30,"./utils/rpc_errors":31,"bn.js":104,"borsh":105,"buffer":108}],3:[function(require,module,exports){
+},{"./constants":9,"./providers":18,"./transaction":23,"./utils/errors":25,"./utils/exponential-backoff":26,"./utils/key_pair":29,"./utils/logging":30,"./utils/rpc_errors":31,"bn.js":104,"borsh":105}],3:[function(require,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -565,7 +560,6 @@ class UrlAccountCreator extends AccountCreator {
 exports.UrlAccountCreator = UrlAccountCreator;
 
 },{"./utils/web":33}],4:[function(require,module,exports){
-(function (Buffer){(function (){
 'use strict';
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -640,7 +634,7 @@ class AccountMultisig extends account_1.Account {
         });
         return __awaiter(this, void 0, void 0, function* () {
             const { accountId } = this;
-            const args = Buffer.from(JSON.stringify({
+            const args = globalThis.Buffer.from(JSON.stringify({
                 request: {
                     receiver_id: receiverId,
                     actions: convertActions(actions, accountId, receiverId)
@@ -673,7 +667,7 @@ class AccountMultisig extends account_1.Account {
             this.setRequest({
                 accountId,
                 actions,
-                requestId: parseInt(Buffer.from(status.SuccessValue, 'base64').toString('ascii'), 10)
+                requestId: parseInt(globalThis.Buffer.from(status.SuccessValue, 'base64').toString('ascii'), 10)
             });
             if (this.onAddRequestResult) {
                 yield this.onAddRequestResult(result);
@@ -836,7 +830,7 @@ class Account2FA extends AccountMultisig {
                 .map((ak) => ak.public_key)
                 .map(toPK);
             const confirmOnlyKey = toPK((yield this.postSignedJson('/2fa/getAccessKey', { accountId })).publicKey);
-            const newArgs = Buffer.from(JSON.stringify({ 'num_confirmations': 2 }));
+            const newArgs = globalThis.Buffer.from(JSON.stringify({ 'num_confirmations': 2 }));
             const actions = [
                 ...fak2lak.map((pk) => (0, transaction_1.deleteKey)(pk)),
                 ...fak2lak.map((pk) => (0, transaction_1.addKey)(pk, (0, transaction_1.functionCallAccessKey)(accountId, exports.MULTISIG_CHANGE_METHODS, null))),
@@ -1024,8 +1018,8 @@ class Account2FA extends AccountMultisig {
             const { accountId } = this;
             const block = yield this.connection.provider.block({ finality: 'final' });
             const blockNumber = block.header.height.toString();
-            const signed = yield this.connection.signer.signMessage(Buffer.from(blockNumber), accountId, this.connection.networkId);
-            const blockNumberSignature = Buffer.from(signed.signature).toString('base64');
+            const signed = yield this.connection.signer.signMessage(globalThis.Buffer.from(blockNumber), accountId, this.connection.networkId);
+            const blockNumberSignature = globalThis.Buffer.from(signed.signature).toString('base64');
             return { blockNumber, blockNumberSignature };
         });
     }
@@ -1047,8 +1041,8 @@ const convertActions = (actions, accountId, receiverId) => actions.map((a) => {
         gas: (gas && gas.toString()) || undefined,
         public_key: (publicKey && convertPKForContract(publicKey)) || undefined,
         method_name: methodName,
-        args: (args && Buffer.from(args).toString('base64')) || undefined,
-        code: (code && Buffer.from(code).toString('base64')) || undefined,
+        args: (args && globalThis.Buffer.from(args).toString('base64')) || undefined,
+        code: (code && globalThis.Buffer.from(code).toString('base64')) || undefined,
         amount: (deposit && deposit.toString()) || undefined,
         deposit: (deposit && deposit.toString()) || '0',
         permission: undefined,
@@ -1073,8 +1067,7 @@ const convertActions = (actions, accountId, receiverId) => actions.map((a) => {
     return action;
 });
 
-}).call(this)}).call(this,require("buffer").Buffer)
-},{"./account":2,"./providers":18,"./transaction":23,"./utils/format":27,"./utils/key_pair":29,"./utils/web":33,"bn.js":104,"buffer":108}],5:[function(require,module,exports){
+},{"./account":2,"./providers":18,"./transaction":23,"./utils/format":27,"./utils/key_pair":29,"./utils/web":33,"bn.js":104}],5:[function(require,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -1240,6 +1233,7 @@ function getSigner(config) {
         case undefined:
             return config;
         case 'InMemorySigner': {
+            console.log('inmemory signer ', config.keyStore);
             return new signer_1.InMemorySigner(config.keyStore);
         }
         default: throw new Error(`Unknown signer type ${config.type}`);
@@ -2432,7 +2426,7 @@ class BrowserLocalStorageKeyStore extends keystore_1.KeyStore {
      */
     setKey(networkId, accountId, keyPair) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.localStorage = Object.assign(Object.assign({}, localStorage), { [this.storageKeyForSecretKey(networkId, accountId)]: keyPair.toString() });
+            this.localStorage = Object.assign(Object.assign({}, this.localStorage), { [this.storageKeyForSecretKey(networkId, accountId)]: keyPair.toString() });
             yield chrome.storage.local.set({
                 near_app_wallet_auth_key: keyPair.toString(),
             });
@@ -2471,7 +2465,7 @@ class BrowserLocalStorageKeyStore extends keystore_1.KeyStore {
         return __awaiter(this, void 0, void 0, function* () {
             for (const key of this.storageKeys()) {
                 if (key.startsWith(this.prefix)) {
-                    if (localStorage) {
+                    if (this.localStorage) {
                         this.localStorage.removeItem(key);
                     }
                 }
@@ -2885,7 +2879,6 @@ Object.defineProperty(exports, "TypedError", { enumerable: true, get: function (
 Object.defineProperty(exports, "ErrorContext", { enumerable: true, get: function () { return json_rpc_provider_1.ErrorContext; } });
 
 },{"./json-rpc-provider":19,"./provider":20}],19:[function(require,module,exports){
-(function (Buffer){(function (){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -2965,7 +2958,7 @@ class JsonRpcProvider extends provider_1.Provider {
     sendTransaction(signedTransaction) {
         return __awaiter(this, void 0, void 0, function* () {
             const bytes = signedTransaction.encode();
-            return this.sendJsonRpc('broadcast_tx_commit', [Buffer.from(bytes).toString('base64')]);
+            return this.sendJsonRpc('broadcast_tx_commit', [globalThis.Buffer.from(bytes).toString('base64')]);
         });
     }
     /**
@@ -2977,7 +2970,7 @@ class JsonRpcProvider extends provider_1.Provider {
     sendTransactionAsync(signedTransaction) {
         return __awaiter(this, void 0, void 0, function* () {
             const bytes = signedTransaction.encode();
-            return this.sendJsonRpc('broadcast_tx_async', [Buffer.from(bytes).toString('base64')]);
+            return this.sendJsonRpc('broadcast_tx_async', [globalThis.Buffer.from(bytes).toString('base64')]);
         });
     }
     /**
@@ -3279,9 +3272,7 @@ class JsonRpcProvider extends provider_1.Provider {
 }
 exports.JsonRpcProvider = JsonRpcProvider;
 
-}).call(this)}).call(this,require("buffer").Buffer)
-},{"../utils/errors":25,"../utils/exponential-backoff":26,"../utils/rpc_errors":31,"../utils/web":33,"./provider":20,"borsh":105,"buffer":108}],20:[function(require,module,exports){
-(function (Buffer){(function (){
+},{"../utils/errors":25,"../utils/exponential-backoff":26,"../utils/rpc_errors":31,"../utils/web":33,"./provider":20,"borsh":105}],20:[function(require,module,exports){
 "use strict";
 /**
  * NEAR RPC API request types and responses
@@ -3313,7 +3304,7 @@ exports.Provider = Provider;
 /** @hidden */
 function getTransactionLastResult(txResult) {
     if (typeof txResult.status === 'object' && typeof txResult.status.SuccessValue === 'string') {
-        const value = Buffer.from(txResult.status.SuccessValue, 'base64').toString();
+        const value = globalThis.Buffer.from(txResult.status.SuccessValue, 'base64').toString();
         try {
             return JSON.parse(value);
         }
@@ -3325,8 +3316,7 @@ function getTransactionLastResult(txResult) {
 }
 exports.getTransactionLastResult = getTransactionLastResult;
 
-}).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":108}],21:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 module.exports={
     "GasLimitExceeded": "Exceeded the maximum amount of gas allowed to burn per contract",
     "MethodEmptyName": "Method name is empty",
@@ -3497,7 +3487,6 @@ class InMemorySigner extends Signer {
 exports.InMemorySigner = InMemorySigner;
 
 },{"./key_stores/in_memory_key_store":14,"./utils/key_pair":29,"js-sha256":129}],23:[function(require,module,exports){
-(function (Buffer){(function (){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -3574,7 +3563,7 @@ function deployContract(code) {
 exports.deployContract = deployContract;
 function stringifyJsonOrBytes(args) {
     const isUint8Array = args.byteLength !== undefined && args.byteLength === args.length;
-    const serializedArgs = isUint8Array ? args : Buffer.from(JSON.stringify(args));
+    const serializedArgs = isUint8Array ? args : globalThis.Buffer.from(JSON.stringify(args));
     return serializedArgs;
 }
 exports.stringifyJsonOrBytes = stringifyJsonOrBytes;
@@ -3756,8 +3745,7 @@ function signTransaction(...args) {
 }
 exports.signTransaction = signTransaction;
 
-}).call(this)}).call(this,require("buffer").Buffer)
-},{"./utils/enums":24,"./utils/key_pair":29,"borsh":105,"buffer":108,"js-sha256":129}],24:[function(require,module,exports){
+},{"./utils/enums":24,"./utils/key_pair":29,"borsh":105,"js-sha256":129}],24:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Assignable = exports.Enum = void 0;
@@ -4511,7 +4499,6 @@ function diffEpochValidators(currentValidators, nextValidators) {
 exports.diffEpochValidators = diffEpochValidators;
 
 },{"bn.js":104,"depd":114}],35:[function(require,module,exports){
-(function (Buffer){(function (){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -4591,20 +4578,14 @@ class WalletConnection {
         this._networkId = near.config.networkId;
         this._walletBaseUrl = near.config.walletUrl;
         this._keyStore = near.connection.signer.keyStore;
-        this._authData = authData || { allKeys: [] };
         this._authDataKey = authDataKey;
+        this._authData = authData || { allKeys: [] };
+        chrome.storage.local.get([authDataKey, 'near-api-js:keystore:orydzi.near:mainnet'], (result) => __awaiter(this, void 0, void 0, function* () {
+            this._authData = result[authDataKey];
+        }));
         if (!this.isSignedIn()) {
             this._completeSignInPromise = this._completeSignInWithAccessKey();
         }
-    }
-    componentDidMount() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!(globalThis === null || globalThis === void 0 ? void 0 : globalThis.localStorage)) {
-                const authData = yield chrome.storage.local.get(['near_app_wallet_auth_key']);
-                this._authData = authData || { allKeys: [] };
-                this._authDataKey = 'near_app_wallet_auth_key';
-            }
-        });
     }
     /**
      * Returns true, if this WalletConnection is authorized with the wallet.
@@ -4645,6 +4626,7 @@ class WalletConnection {
      * ```
      */
     getAccountId() {
+        console.log('_authData', this._authData);
         return this._authData.accountId || '';
     }
     /**
@@ -4703,7 +4685,7 @@ class WalletConnection {
             const newUrl = new URL('sign', this._walletBaseUrl);
             newUrl.searchParams.set('transactions', transactions
                 .map(transaction => (0, borsh_2.serialize)(transaction_1.SCHEMA, transaction))
-                .map(serialized => Buffer.from(serialized).toString('base64'))
+                .map(serialized => globalThis.Buffer.from(serialized).toString('base64'))
                 .join(','));
             newUrl.searchParams.set('callbackUrl', callbackUrl || currentUrl.href);
             if (meta)
@@ -4895,8 +4877,7 @@ class ConnectedWalletAccount extends account_1.Account {
 }
 exports.ConnectedWalletAccount = ConnectedWalletAccount;
 
-}).call(this)}).call(this,require("buffer").Buffer)
-},{"./account":2,"./transaction":23,"./utils":28,"bn.js":104,"borsh":105,"buffer":108}],36:[function(require,module,exports){
+},{"./account":2,"./transaction":23,"./utils":28,"bn.js":104,"borsh":105}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.formatNames = exports.fastFormats = exports.fullFormats = void 0;

@@ -65,7 +65,7 @@ export class AccountMultisig extends Account {
     async signAndSendTransaction({ receiverId, actions }: SignAndSendTransactionOptions): Promise<FinalExecutionOutcome> {
         const { accountId } = this;
 
-        const args = Buffer.from(JSON.stringify({
+        const args = globalThis.Buffer.from(JSON.stringify({
             request: {
                 receiver_id: receiverId,
                 actions: convertActions(actions, accountId, receiverId)
@@ -100,7 +100,7 @@ export class AccountMultisig extends Account {
         this.setRequest({
             accountId,
             actions,
-            requestId: parseInt(Buffer.from(status.SuccessValue, 'base64').toString('ascii'), 10)
+            requestId: parseInt(globalThis.Buffer.from(status.SuccessValue, 'base64').toString('ascii'), 10)
         });
 
         if (this.onAddRequestResult) {
@@ -264,7 +264,7 @@ export class Account2FA extends AccountMultisig {
 
         const confirmOnlyKey = toPK((await this.postSignedJson('/2fa/getAccessKey', { accountId })).publicKey);
 
-        const newArgs = Buffer.from(JSON.stringify({ 'num_confirmations': 2 }));
+        const newArgs = globalThis.Buffer.from(JSON.stringify({ 'num_confirmations': 2 }));
 
         const actions = [
             ...fak2lak.map((pk) => deleteKey(pk)),
@@ -312,7 +312,7 @@ export class Account2FA extends AccountMultisig {
     }
 
     async get2faDisableCleanupActions(cleanupContractBytes: Uint8Array) {
-        const currentAccountState: { key: Buffer; value: Buffer }[] = await this.viewState('').catch(error => {
+        const currentAccountState: { key: globalThis.Buffer; value: globalThis.Buffer }[] = await this.viewState('').catch(error => {
             const cause = error.cause && error.cause.name;
             if (cause == 'NO_CONTRACT_CODE') {
                 return [];
@@ -451,8 +451,8 @@ export class Account2FA extends AccountMultisig {
         const { accountId } = this;
         const block = await this.connection.provider.block({ finality: 'final' });
         const blockNumber = block.header.height.toString();
-        const signed = await this.connection.signer.signMessage(Buffer.from(blockNumber), accountId, this.connection.networkId);
-        const blockNumberSignature = Buffer.from(signed.signature).toString('base64');
+        const signed = await this.connection.signer.signMessage(globalThis.Buffer.from(blockNumber), accountId, this.connection.networkId);
+        const blockNumberSignature = globalThis.Buffer.from(signed.signature).toString('base64');
         return { blockNumber, blockNumberSignature };
     }
 
@@ -476,8 +476,8 @@ const convertActions = (actions, accountId, receiverId) => actions.map((a) => {
         gas: (gas && gas.toString()) || undefined,
         public_key: (publicKey && convertPKForContract(publicKey)) || undefined,
         method_name: methodName,
-        args: (args && Buffer.from(args).toString('base64')) || undefined,
-        code: (code && Buffer.from(code).toString('base64')) || undefined,
+        args: (args && globalThis.Buffer.from(args).toString('base64')) || undefined,
+        code: (code && globalThis.Buffer.from(code).toString('base64')) || undefined,
         amount: (deposit && deposit.toString()) || undefined,
         deposit: (deposit && deposit.toString()) || '0',
         permission: undefined,

@@ -50,9 +50,9 @@ export function deployContract(code: Uint8Array): Action {
     return new Action({ deployContract: new DeployContract({code}) });
 }
 
-export function stringifyJsonOrBytes(args: any): Buffer {
+export function stringifyJsonOrBytes(args: any): globalThis.Buffer {
     const isUint8Array = args.byteLength !== undefined && args.byteLength === args.length;
-    const serializedArgs = isUint8Array ? args : Buffer.from(JSON.stringify(args));
+    const serializedArgs = isUint8Array ? args : globalThis.Buffer.from(JSON.stringify(args));
     return serializedArgs;
 }
 
@@ -111,7 +111,7 @@ export class Transaction extends Assignable {
         return serialize(SCHEMA, this);
     }
 
-    static decode(bytes: Buffer): Transaction {
+    static decode(bytes: globalThis.Buffer): Transaction {
         return deserialize(SCHEMA, Transaction, bytes);
     }
 }
@@ -124,7 +124,7 @@ export class SignedTransaction extends Assignable {
         return serialize(SCHEMA, this);
     }
 
-    static decode(bytes: Buffer): SignedTransaction {
+    static decode(bytes: globalThis.Buffer): SignedTransaction {
         return deserialize(SCHEMA, SignedTransaction, bytes);
     }
 }

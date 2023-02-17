@@ -2,7 +2,7 @@ const { functionCall } = require('../src/transaction');
 const BN = require('bn.js');
 
 test('functionCall with already serialized args', () => {
-    const serializedArgs = Buffer.from('{}');
+    const serializedArgs = globalThis.Buffer.from('{}');
     const action = functionCall('methodName', serializedArgs, new BN(1), new BN(2));    
     expect(action).toMatchObject({ 
         functionCall: {
@@ -15,7 +15,7 @@ test('functionCall with already serialized args', () => {
 });
 
 test('functionCall with non-serialized args', () => {
-    const serializedArgs = Buffer.from('{}');
+    const serializedArgs = globalThis.Buffer.from('{}');
     const action = functionCall('methodName', {}, new BN(1), new BN(2));    
     expect(action).toMatchObject({ 
         functionCall: {

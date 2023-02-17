@@ -99,7 +99,7 @@ export interface FunctionCallOptions {
     /**
      * Convert input arguments into bytes array.
      */
-    stringify?: (input: any) => Buffer;
+    stringify?: (input: any) => globalThis.Buffer;
     /**
      * Is contract from JS SDK, automatically encodes args from JS SDK to binary.
      */
@@ -136,11 +136,11 @@ interface ActiveDelegatedStakeBalance {
 }
 
 function parseJsonFromRawResponse(response: Uint8Array): any {
-    return JSON.parse(Buffer.from(response).toString());
+    return JSON.parse(globalThis.Buffer.from(response).toString());
 }
 
-function bytesJsonStringify(input: any): Buffer {
-    return Buffer.from(JSON.stringify(input));
+function bytesJsonStringify(input: any): globalThis.Buffer {
+    return globalThis.Buffer.from(JSON.stringify(input));
 }
 
 /**
@@ -364,7 +364,7 @@ export class Account {
 
     /** @hidden */
     private encodeJSContractArgs(contractId: string, method: string, args) {
-        return Buffer.concat([Buffer.from(contractId), Buffer.from([0]), Buffer.from(method), Buffer.from([0]), Buffer.from(args)]);
+        return globalThis.Buffer.concat([globalThis.Buffer.from(contractId), globalThis.Buffer.from([0]), globalThis.Buffer.from(method), globalThis.Buffer.from([0]), globalThis.Buffer.from(args)]);
     }
 
     /**
@@ -462,7 +462,7 @@ export class Account {
      * @param viewFunctionCallOptions.contractId NEAR account where the contract is deployed
      * @param viewFunctionCallOptions.methodName The view-only method (no state mutations) name on the contract as it is written in the contract code
      * @param viewFunctionCallOptions.args Any arguments to the view contract method, wrapped in JSON
-     * @param viewFunctionCallOptions.parse Parse the result of the call. Receives a Buffer (bytes array) and converts it to any object. By default result will be treated as json.
+     * @param viewFunctionCallOptions.parse Parse the result of the call. Receives a globalThis.Buffer (bytes array) and converts it to any object. By default result will be treated as json.
      * @param viewFunctionCallOptions.stringify Convert input arguments into a bytes array. By default the input is treated as a JSON.
      * @param viewFunctionCallOptions.jsContract Is contract from JS SDK, automatically encodes args from JS SDK to binary.
      * @param viewFunctionCallOptions.blockQuery specifies which block to query state at. By default returns last "optimistic" block (i.e. not necessarily finalized).
@@ -500,7 +500,7 @@ export class Account {
             printTxOutcomeLogs({ contractId, logs: result.logs });
         }
 
-        return result.result && result.result.length > 0 && parse(Buffer.from(result.result));
+        return result.result && result.result.length > 0 && parse(globalThis.Buffer.from(result.result));
     }
 
     /**
@@ -511,17 +511,17 @@ export class Account {
      * @param prefix allows to filter which keys should be returned. Empty prefix means all keys. String prefix is utf-8 encoded.
      * @param blockQuery specifies which block to query state at. By default returns last "optimistic" block (i.e. not necessarily finalized).
      */
-    async viewState(prefix: string | Uint8Array, blockQuery: BlockReference = { finality: 'optimistic' } ): Promise<Array<{ key: Buffer; value: Buffer}>> {
+    async viewState(prefix: string | Uint8Array, blockQuery: BlockReference = { finality: 'optimistic' } ): Promise<Array<{ key: globalThis.Buffer; value: globalThis.Buffer}>> {
         const { values } = await this.connection.provider.query<ViewStateResult>({
             request_type: 'view_state',
             ...blockQuery,
             account_id: this.accountId,
-            prefix_base64: Buffer.from(prefix).toString('base64')
+            prefix_base64: globalThis.Buffer.from(prefix).toString('base64')
         });
 
         return values.map(({ key, value }) => ({
-            key: Buffer.from(key, 'base64'),
-            value: Buffer.from(value, 'base64')
+            key: globalThis.Buffer.from(key, 'base64'),
+            value: globalThis.Buffer.from(value, 'base64')
         }));
     }
 

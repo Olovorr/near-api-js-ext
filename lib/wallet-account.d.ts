@@ -67,7 +67,6 @@ export declare class WalletConnection {
     /** @hidden */
     _completeSignInPromise: Promise<void>;
     constructor(near: Near, appKeyPrefix: string);
-    componentDidMount(): Promise<void>;
     /**
      * Returns true, if this WalletConnection is authorized with the wallet.
      * @example

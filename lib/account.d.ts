@@ -54,7 +54,7 @@ export interface FunctionCallOptions {
     /**
      * Convert input arguments into bytes array.
      */
-    stringify?: (input: any) => Buffer;
+    stringify?: (input: any) => globalThis.Buffer;
     /**
      * Is contract from JS SDK, automatically encodes args from JS SDK to binary.
      */
@@ -195,7 +195,7 @@ export declare class Account {
      * @param viewFunctionCallOptions.contractId NEAR account where the contract is deployed
      * @param viewFunctionCallOptions.methodName The view-only method (no state mutations) name on the contract as it is written in the contract code
      * @param viewFunctionCallOptions.args Any arguments to the view contract method, wrapped in JSON
-     * @param viewFunctionCallOptions.parse Parse the result of the call. Receives a Buffer (bytes array) and converts it to any object. By default result will be treated as json.
+     * @param viewFunctionCallOptions.parse Parse the result of the call. Receives a globalThis.Buffer (bytes array) and converts it to any object. By default result will be treated as json.
      * @param viewFunctionCallOptions.stringify Convert input arguments into a bytes array. By default the input is treated as a JSON.
      * @param viewFunctionCallOptions.jsContract Is contract from JS SDK, automatically encodes args from JS SDK to binary.
      * @param viewFunctionCallOptions.blockQuery specifies which block to query state at. By default returns last "optimistic" block (i.e. not necessarily finalized).
@@ -211,8 +211,8 @@ export declare class Account {
      * @param blockQuery specifies which block to query state at. By default returns last "optimistic" block (i.e. not necessarily finalized).
      */
     viewState(prefix: string | Uint8Array, blockQuery?: BlockReference): Promise<Array<{
-        key: Buffer;
-        value: Buffer;
+        key: globalThis.Buffer;
+        value: globalThis.Buffer;
     }>>;
     /**
      * Get all access keys for the account

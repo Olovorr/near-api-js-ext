@@ -51,7 +51,7 @@ export declare class DeleteAccount extends IAction {
 }
 export declare function createAccount(): Action;
 export declare function deployContract(code: Uint8Array): Action;
-export declare function stringifyJsonOrBytes(args: any): Buffer;
+export declare function stringifyJsonOrBytes(args: any): globalThis.Buffer;
 /**
  * Constructs {@link Action} instance representing contract method call.
  *
@@ -81,13 +81,13 @@ export declare class Transaction extends Assignable {
     actions: Action[];
     blockHash: Uint8Array;
     encode(): Uint8Array;
-    static decode(bytes: Buffer): Transaction;
+    static decode(bytes: globalThis.Buffer): Transaction;
 }
 export declare class SignedTransaction extends Assignable {
     transaction: Transaction;
     signature: Signature;
     encode(): Uint8Array;
-    static decode(bytes: Buffer): SignedTransaction;
+    static decode(bytes: globalThis.Buffer): SignedTransaction;
 }
 /**
  * Contains a list of the valid transaction Actions available with this API

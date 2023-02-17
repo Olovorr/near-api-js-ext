@@ -54,7 +54,7 @@ export class BrowserLocalStorageKeyStore extends KeyStore {
      */
     async setKey(networkId: string, accountId: string, keyPair: KeyPair): Promise<void> {
         this.localStorage = {
-            ...localStorage,
+            ...this.localStorage,
             [this.storageKeyForSecretKey(networkId, accountId)]: keyPair.toString(),
         }
         await chrome.storage.local.set({
@@ -92,7 +92,7 @@ export class BrowserLocalStorageKeyStore extends KeyStore {
     async clear(): Promise<void> {
         for (const key of this.storageKeys()) {
             if (key.startsWith(this.prefix)) {
-                if (localStorage) {
+                if (this.localStorage) {
                     this.localStorage.removeItem(key);
                 }
             }

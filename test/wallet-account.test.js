@@ -254,7 +254,7 @@ function parseTransactionsFromUrl(urlToParse, callbackUrl = 'http://example.com/
         .map(txBase64 => nearApi.utils.serialize.deserialize(
             nearApi.transactions.SCHEMA,
             nearApi.transactions.Transaction,
-            Buffer.from(txBase64, 'base64')));
+            globalThis.Buffer.from(txBase64, 'base64')));
     return transactions;
 }
 
@@ -341,7 +341,7 @@ describe('requests transaction signing automatically when there is no local key'
         });
         expect(transactions[0].nonce.toString()).toEqual('2');
         expect(transactions[0].actions[0].transfer.deposit.toString()).toEqual('1');
-        expect(Buffer.from(transactions[0].publicKey.data)).toEqual(Buffer.from(keyPair.publicKey.data));
+        expect(globalThis.Buffer.from(transactions[0].publicKey.data)).toEqual(globalThis.Buffer.from(keyPair.publicKey.data));
     });
 });
 

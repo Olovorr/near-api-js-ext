@@ -78,7 +78,7 @@ export class JsonRpcProvider extends Provider {
      */
     async sendTransaction(signedTransaction: SignedTransaction): Promise<FinalExecutionOutcome> {
         const bytes = signedTransaction.encode();
-        return this.sendJsonRpc('broadcast_tx_commit', [Buffer.from(bytes).toString('base64')]);
+        return this.sendJsonRpc('broadcast_tx_commit', [globalThis.Buffer.from(bytes).toString('base64')]);
     }
 
     /**
@@ -89,7 +89,7 @@ export class JsonRpcProvider extends Provider {
      */
     async sendTransactionAsync(signedTransaction: SignedTransaction): Promise<FinalExecutionOutcome> {
         const bytes = signedTransaction.encode();
-        return this.sendJsonRpc('broadcast_tx_async', [Buffer.from(bytes).toString('base64')]);
+        return this.sendJsonRpc('broadcast_tx_async', [globalThis.Buffer.from(bytes).toString('base64')]);
     }
 
     /**

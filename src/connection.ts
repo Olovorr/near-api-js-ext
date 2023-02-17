@@ -23,6 +23,7 @@ function getSigner(config: any): Signer {
         case undefined:
             return config;
         case 'InMemorySigner': {
+            console.log('inmemory signer ', config.keyStore);
             return new InMemorySigner(config.keyStore);
         }
         default: throw new Error(`Unknown signer type ${config.type}`);
@@ -42,7 +43,7 @@ export class Connection {
         this.networkId = networkId;
         this.provider = provider;
         this.signer = signer;
-        this.jsvmAccountId = jsvmAccountId; 
+        this.jsvmAccountId = jsvmAccountId;
     }
 
     /**
