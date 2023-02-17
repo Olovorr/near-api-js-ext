@@ -2418,8 +2418,11 @@ class BrowserLocalStorageKeyStore extends keystore_1.KeyStore {
      */
     constructor(localStorage = globalThis.localStorage, prefix = LOCAL_STORAGE_KEY_PREFIX) {
         super();
-        this.localStorage = localStorage;
+        this.localStorage = {};
         this.prefix = prefix;
+        chrome.storage.local.get().then(result => {
+            this.localStorage = Object.assign({}, result);
+        });
     }
     /**
      * Stores a {@link utils/key_pair!KeyPair} in local storage.
@@ -2429,14 +2432,10 @@ class BrowserLocalStorageKeyStore extends keystore_1.KeyStore {
      */
     setKey(networkId, accountId, keyPair) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.localStorage) {
-                this.localStorage.setItem(this.storageKeyForSecretKey(networkId, accountId), keyPair.toString());
-            }
-            else {
-                yield chrome.storage.local.set({
-                    near_app_wallet_auth_key: keyPair.toString(),
-                });
-            }
+            this.localStorage = Object.assign(Object.assign({}, localStorage), { [this.storageKeyForSecretKey(networkId, accountId)]: keyPair.toString() });
+            yield chrome.storage.local.set({
+                near_app_wallet_auth_key: keyPair.toString(),
+            });
         });
     }
     /**
@@ -2447,14 +2446,7 @@ class BrowserLocalStorageKeyStore extends keystore_1.KeyStore {
      */
     getKey(networkId, accountId) {
         return __awaiter(this, void 0, void 0, function* () {
-            let value = null;
-            if (this.localStorage) {
-                value = this.localStorage.getItem(this.storageKeyForSecretKey(networkId, accountId));
-            }
-            else {
-                const authData = yield chrome.storage.local.get(['near_app_wallet_auth_key']);
-                value = authData === null || authData === void 0 ? void 0 : authData.near_app_wallet_auth_key;
-            }
+            const value = this.localStorage[this.storageKeyForSecretKey(networkId, accountId)];
             if (!value) {
                 return null;
             }
@@ -2468,12 +2460,8 @@ class BrowserLocalStorageKeyStore extends keystore_1.KeyStore {
      */
     removeKey(networkId, accountId) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (localStorage) {
-                this.localStorage.removeItem(this.storageKeyForSecretKey(networkId, accountId));
-            }
-            else {
-                yield chrome.storage.local.remove('near_app_wallet_auth_key');
-            }
+            delete this.localStorage[this.storageKeyForSecretKey(networkId, accountId)];
+            yield chrome.storage.local.remove(this.storageKeyForSecretKey(networkId, accountId));
         });
     }
     /**
@@ -2536,9 +2524,7 @@ class BrowserLocalStorageKeyStore extends keystore_1.KeyStore {
     }
     /** @hidden */
     *storageKeys() {
-        for (let i = 0; i < this.localStorage.length; i++) {
-            yield this.localStorage.key(i);
-        }
+        return Object.values(this.localStorage);
     }
 }
 exports.BrowserLocalStorageKeyStore = BrowserLocalStorageKeyStore;
@@ -4776,7 +4762,7 @@ class WalletConnection {
     signOut() {
         var _a, _b;
         this._authData = {};
-        (_a = chrome === null || chrome === void 0 ? void 0 : chrome.storage) === null || _a === void 0 ? void 0 : _a.sync.remove(['near_app_wallet_auth_key']);
+        (_a = chrome === null || chrome === void 0 ? void 0 : chrome.storage) === null || _a === void 0 ? void 0 : _a.local.remove(['near_app_wallet_auth_key']);
         (_b = globalThis === null || globalThis === void 0 ? void 0 : globalThis.localStorage) === null || _b === void 0 ? void 0 : _b.removeItem(this._authDataKey);
     }
     /**
