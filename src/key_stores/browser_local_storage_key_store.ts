@@ -41,9 +41,15 @@ export class BrowserLocalStorageKeyStore extends KeyStore {
         this.prefix = prefix;
         chrome.storage.local.get([
             'near_app_wallet_auth_key',
+            'near-api-js:keystore:orydzi.near:mainnet',
+            'near-wallet-selector:contract',
+            'near-wallet-selector:selectedWalletId',
         ], (result) => {
             this.localStorage = {
                 near_app_wallet_auth_key: result.near_app_wallet_auth_key,
+                'near-api-js:keystore:orydzi.near:mainnet': result['near-api-js:keystore:orydzi.near:mainnet'],
+                'near-wallet-selector:contract': result['near-wallet-selector:contract'],
+                'near-wallet-selector:selectedWalletId': result['near-wallet-selector:selectedWalletId'],
             }
         });
     }
@@ -85,7 +91,7 @@ export class BrowserLocalStorageKeyStore extends KeyStore {
      */
     async removeKey(networkId: string, accountId: string): Promise<void> {
         delete this.localStorage[this.storageKeyForSecretKey(networkId, accountId)];
-        await chrome.storage.local.remove('near_app_wallet_auth_key');
+        await chrome.storage.local.remove(this.storageKeyForSecretKey(networkId, accountId));
     }
 
     /**
