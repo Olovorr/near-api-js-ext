@@ -196,6 +196,7 @@ export class WalletConnection {
 
                 :  currentUrl.href
         );
+
         if (contractId) {
             /* Throws exception if contract account does not exist */
             const contractAccount = await this._near.account(contractId);
