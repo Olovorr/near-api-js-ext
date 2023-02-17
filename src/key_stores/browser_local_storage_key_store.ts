@@ -39,17 +39,9 @@ export class BrowserLocalStorageKeyStore extends KeyStore {
         super();
         this.localStorage = {};
         this.prefix = prefix;
-        chrome.storage.local.get([
-            'near_app_wallet_auth_key',
-            'near-api-js:keystore:orydzi.near:mainnet',
-            'near-wallet-selector:contract',
-            'near-wallet-selector:selectedWalletId',
-        ], (result) => {
+        chrome.storage.local.get().then(result => {
             this.localStorage = {
-                near_app_wallet_auth_key: result.near_app_wallet_auth_key,
-                'near-api-js:keystore:orydzi.near:mainnet': result['near-api-js:keystore:orydzi.near:mainnet'],
-                'near-wallet-selector:contract': result['near-wallet-selector:contract'],
-                'near-wallet-selector:selectedWalletId': result['near-wallet-selector:selectedWalletId'],
+                ...result,
             }
         });
     }
