@@ -288,7 +288,7 @@ export class WalletConnection {
     signOut() {
         this._authData = {};
 
-        chrome?.storage?.sync.remove(['near_app_wallet_auth_key']);
+        chrome?.storage?.local.remove(['near_app_wallet_auth_key']);
         globalThis?.localStorage?.removeItem(this._authDataKey);
     }
 
