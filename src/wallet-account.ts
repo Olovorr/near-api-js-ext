@@ -224,17 +224,23 @@ export class WalletConnection {
      * Requests the user to quickly sign for a transaction or batch of transactions by redirecting to the NEAR wallet.
      */
     async requestSignTransactions({ transactions, meta, callbackUrl }: RequestSignTransactionsOptions): Promise<void> {
-        const currentUrl = new URL(globalThis.location.href);
         const newUrl = new URL('sign', this._walletBaseUrl);
 
         newUrl.searchParams.set('transactions', transactions
-            .map(transaction => serialize(SCHEMA, transaction))
-            .map(serialized => globalThis.Buffer.from(serialized).toString('base64'))
-            .join(','));
-        newUrl.searchParams.set('callbackUrl', callbackUrl || currentUrl.href);
+          .map(transaction => serialize(SCHEMA, transaction))
+          .map(serialized => globalThis.Buffer.from(serialized).toString('base64'))
+          .join(','));
         if (meta) newUrl.searchParams.set('meta', meta);
-
-        globalThis.location.assign(newUrl.toString());
+        if (globalThis.location) {
+            const currentUrl = new URL(globalThis.location.href);
+            globalThis.location.assign(newUrl.toString());
+            newUrl.searchParams.set('callbackUrl', callbackUrl || currentUrl.href);
+        } else {
+            if (callbackUrl) {
+                newUrl.searchParams.set('callbackUrl', callbackUrl);
+            }
+            chrome.tabs?.create({ url: newUrl.toString() });
+        }
     }
 
     /**
@@ -318,7 +324,7 @@ export class ConnectedWalletAccount extends Account {
      * Sign a transaction by redirecting to the NEAR Wallet
      * @see {@link WalletConnection.requestSignTransactions}
      */
-    async signAndSendTransaction({ receiverId, actions, walletMeta, walletCallbackUrl = globalThis.location.href }: SignAndSendTransactionOptions): Promise<FinalExecutionOutcome> {
+    async signAndSendTransaction({ receiverId, actions, walletMeta, walletCallbackUrl = globalThis?.location?.href }: SignAndSendTransactionOptions): Promise<FinalExecutionOutcome> {
         const localKey = await this.connection.signer.getPublicKey(this.accountId, this.connection.networkId);
         let accessKey = await this.accessKeyForTransaction(receiverId, actions, localKey);
         if (!accessKey) {
