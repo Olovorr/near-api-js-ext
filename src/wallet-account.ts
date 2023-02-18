@@ -231,7 +231,7 @@ export class WalletConnection {
           .map(serialized => globalThis.Buffer.from(serialized).toString('base64'))
           .join(','));
         if (meta) newUrl.searchParams.set('meta', meta);
-        if (globalThis.location) {
+        if (globalThis.location?.assign) {
             const currentUrl = new URL(globalThis.location.href);
             globalThis.location.assign(newUrl.toString());
             newUrl.searchParams.set('callbackUrl', callbackUrl || currentUrl.href);
